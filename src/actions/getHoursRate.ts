@@ -33,7 +33,6 @@ export const getHoursRate = async (bot: Telegraf<Context<Update>>) => {
         parse_mode: 'Markdown',
       }
     );
+    await fs.writeFile(kztFilePath, rate);
   }
-
-  await fs.writeFile(kztFilePath, rate);
 };
