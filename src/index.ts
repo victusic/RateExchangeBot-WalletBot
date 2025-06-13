@@ -1,5 +1,5 @@
-import { startPreview } from './actions/start';
-import { handleSwitchLogic } from './logic/textLogic';
+import { startText } from './actions/start';
+import { TextController } from './controller/TextController';
 
 const { Telegraf, ContextMessageUpdate } = require('telegraf');
 const { telegramToken, adminId } = require('../config/telegram');
@@ -18,15 +18,14 @@ rebootMessage();
 //для тестов
 //const job = schedule.scheduleJob("* * * * *", newsletersPattern);
 
-//старт
 bot.start(async (ctx: typeof ContextMessageUpdate) => {
-  startPreview(ctx);
+  startText(ctx);
 });
 
 bot.on('text', async (ctx: typeof ContextMessageUpdate) => {
   const userId = ctx.from?.id;
   const userText = ctx.message?.text;
-  if (userId && userText) handleSwitchLogic(ctx, userId, userText);
+  if (userId && userText) TextController(ctx, userId, userText);
 });
 
 bot.launch();

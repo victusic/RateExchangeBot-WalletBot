@@ -1,8 +1,8 @@
-import { keyboardButtons } from '../state/buttons';
+import { keyboardButtons } from '../const/buttons';
 
 const { ContextMessageUpdate } = require('telegraf');
 
-export const startPreview = async (ctx: typeof ContextMessageUpdate) => {
+export const startText = async (ctx: typeof ContextMessageUpdate) => {
   const userId = ctx.from?.id;
   if (userId) {
     await ctx.replyWithSticker(

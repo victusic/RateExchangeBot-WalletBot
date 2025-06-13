@@ -1,0 +1,36 @@
+import { keyboardButtons } from '../const/buttons';
+import { getParsedUrl } from '../helpers/getParsedUrl';
+import fs from 'fs/promises';
+import { parsePage } from '../helpers/parsePage';
+
+const { ContextMessageUpdate } = require('telegraf');
+
+export const getHoursRate = async (ctx: typeof ContextMessageUpdate) => {
+  const kztFilePath = './src/storage/hours/kzt.txt';
+  const { rate } = await parsePage(getParsedUrl('rub-kzt'));
+  const currentRubKztRate = parseFloat(rate.replace(',', '.'));
+  const previousRateText = await fs.readFile(kztFilePath, 'utf-8');
+  const previousRate = parseFloat(previousRateText.replace(',', '.'));
+
+  let sendMessage = false;
+  if (Math.abs(currentRubKztRate - previousRate) > 0.2) {
+    sendMessage = true;
+  }
+
+  if (sendMessage) {
+    await ctx.reply(
+      `₽/₸:  ${rate}   ${currentRubKztRate - previousRate > 0 ? '+' : ''}${(
+        currentRubKztRate - previousRate
+      ).toFixed(3)}`,
+      {
+        reply_markup: {
+          keyboard: keyboardButtons,
+          resize_keyboard: true,
+          one_time_keyboard: false,
+        },
+        parse_mode: 'Markdown',
+      }
+    );
+  }
+  await fs.writeFile(kztFilePath, rate);
+};
