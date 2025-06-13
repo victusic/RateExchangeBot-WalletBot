@@ -1,10 +1,12 @@
+import { Update } from 'telegraf/typings/core/types/typegram';
 import { keyboardButtons } from '../const/buttons';
 import { getParsedUrl } from '../helpers/getParsedUrl';
 import { parsePage } from '../helpers/parsePage';
 import fs from 'fs/promises';
-import { Context } from 'telegraf';
+import { Context, Telegraf } from 'telegraf';
+import { adminId } from '../../config/telegram';
 
-export const getDailyRate = async (ctx: Context) => {
+export const getDailyRate = async (bot: Telegraf<Context<Update>>) => {
   const filePath = './src/storage/daily/';
   const fileExtension = '.txt';
 
@@ -69,7 +71,8 @@ $/₽:  ${rateUsd}   ${currentRubUsdRate - previousRateUsd > 0 ? '+' : ''}${(
 ฿/₽:  ${rateThb}   ${currentRubThbRate - previousRateThb > 0 ? '+' : ''}${(
     currentRubThbRate - previousRateThb
   ).toFixed(3)}`;
-  await ctx.reply(text, {
+
+  await bot.telegram.sendMessage(adminId, text, {
     reply_markup: {
       keyboard: keyboardButtons,
       resize_keyboard: true,
@@ -77,6 +80,7 @@ $/₽:  ${rateUsd}   ${currentRubUsdRate - previousRateUsd > 0 ? '+' : ''}${(
     },
     parse_mode: 'Markdown',
   });
+
   await fs.writeFile(`${filePath}kzt${fileExtension}`, rateKzt);
   await fs.writeFile(`${filePath}usd${fileExtension}`, rateUsd);
   await fs.writeFile(`${filePath}eur${fileExtension}`, rateEur);

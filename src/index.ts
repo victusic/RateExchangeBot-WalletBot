@@ -4,7 +4,9 @@ import { startText } from './actions/start';
 import { TextController } from './controller/TextController';
 
 import { Telegraf, Context } from 'telegraf';
-//const schedule = require("node-schedule");
+import schedule from 'node-schedule';
+import { getHoursRate } from './actions/getHoursRate';
+import { getDailyRate } from './actions/getDailyRate';
 
 const bot = new Telegraf(telegramToken);
 
@@ -14,10 +16,13 @@ const rebootMessage = async () => {
 
 rebootMessage();
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-//const job = schedule.scheduleJob("0 * * * *", newsletersPattern);
-//для тестов
-//const job = schedule.scheduleJob("* * * * *", newsletersPattern);
+//daily
+schedule.scheduleJob('58 9 * * *', () => getDailyRate(bot));
+
+//hours
+schedule.scheduleJob('59 7,11,13,15,17,19,21,23,1 * * *', () =>
+  getHoursRate(bot)
+);
 
 bot.start(async (ctx: Context) => {
   startText(ctx);

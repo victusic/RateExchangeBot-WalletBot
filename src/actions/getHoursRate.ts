@@ -2,9 +2,11 @@ import { keyboardButtons } from '../const/buttons';
 import { getParsedUrl } from '../helpers/getParsedUrl';
 import fs from 'fs/promises';
 import { parsePage } from '../helpers/parsePage';
-import { Context } from 'telegraf';
+import { Context, Telegraf } from 'telegraf';
+import { adminId } from '../../config/telegram';
+import { Update } from 'telegraf/typings/core/types/typegram';
 
-export const getHoursRate = async (ctx: Context) => {
+export const getHoursRate = async (bot: Telegraf<Context<Update>>) => {
   const kztFilePath = './src/storage/hours/kzt.txt';
   const { rate } = await parsePage(getParsedUrl('rub-kzt'));
   const currentRubKztRate = parseFloat(rate.replace(',', '.'));
@@ -17,7 +19,8 @@ export const getHoursRate = async (ctx: Context) => {
   }
 
   if (sendMessage) {
-    await ctx.reply(
+    await bot.telegram.sendMessage(
+      adminId,
       `₽/₸:  ${rate}   ${currentRubKztRate - previousRate > 0 ? '+' : ''}${(
         currentRubKztRate - previousRate
       ).toFixed(3)}`,
@@ -31,5 +34,6 @@ export const getHoursRate = async (ctx: Context) => {
       }
     );
   }
+
   await fs.writeFile(kztFilePath, rate);
 };
