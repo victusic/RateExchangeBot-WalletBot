@@ -2,10 +2,9 @@ import { keyboardButtons } from '../const/buttons';
 import { getParsedUrl } from '../helpers/getParsedUrl';
 import fs from 'fs/promises';
 import { parsePage } from '../helpers/parsePage';
+import { Context } from 'telegraf';
 
-const { ContextMessageUpdate } = require('telegraf');
-
-export const getHoursRate = async (ctx: typeof ContextMessageUpdate) => {
+export const getHoursRate = async (ctx: Context) => {
   const kztFilePath = './src/storage/hours/kzt.txt';
   const { rate } = await parsePage(getParsedUrl('rub-kzt'));
   const currentRubKztRate = parseFloat(rate.replace(',', '.'));

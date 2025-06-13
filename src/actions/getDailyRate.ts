@@ -2,10 +2,9 @@ import { keyboardButtons } from '../const/buttons';
 import { getParsedUrl } from '../helpers/getParsedUrl';
 import { parsePage } from '../helpers/parsePage';
 import fs from 'fs/promises';
+import { Context } from 'telegraf';
 
-const { ContextMessageUpdate } = require('telegraf');
-
-export const getDailyRate = async (ctx: typeof ContextMessageUpdate) => {
+export const getDailyRate = async (ctx: Context) => {
   const filePath = './src/storage/daily/';
   const fileExtension = '.txt';
 

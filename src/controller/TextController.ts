@@ -6,11 +6,10 @@ import { getHoursRate } from '../actions/getHoursRate';
 import { getPoundRate } from '../actions/getPoundRate';
 import { getRubRate } from '../actions/getRubRate';
 import { getTengeRate } from '../actions/getTengeRate';
-
-const { ContextMessageUpdate } = require('telegraf');
+import { Context } from 'telegraf';
 
 export const TextController = (
-  ctx: typeof ContextMessageUpdate,
+  ctx: Context,
   userId: number,
   userText: string
 ) => {

@@ -1,10 +1,9 @@
 import { keyboardButtons } from '../const/buttons';
 import { getDefaultExchangeText } from '../helpers/getDefaultExchangeText';
 import { getParsedUrl } from '../helpers/getParsedUrl';
+import { Context } from 'telegraf';
 
-const { ContextMessageUpdate } = require('telegraf');
-
-export const getTengeRate = async (ctx: typeof ContextMessageUpdate) => {
+export const getTengeRate = async (ctx: Context) => {
   const text = `
 ${await getDefaultExchangeText('₽/₸', getParsedUrl('rub-kzt'))}
 ${await getDefaultExchangeText('$/₸', getParsedUrl('usd-kzt'))}

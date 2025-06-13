@@ -1,8 +1,9 @@
+import { Message } from 'telegraf/typings/core/types/typegram';
+import { adminId, telegramToken } from '../config/telegram';
 import { startText } from './actions/start';
 import { TextController } from './controller/TextController';
 
-const { Telegraf, ContextMessageUpdate } = require('telegraf');
-const { telegramToken, adminId } = require('../config/telegram');
+import { Telegraf, Context } from 'telegraf';
 //const schedule = require("node-schedule");
 
 const bot = new Telegraf(telegramToken);
@@ -18,13 +19,14 @@ rebootMessage();
 //для тестов
 //const job = schedule.scheduleJob("* * * * *", newsletersPattern);
 
-bot.start(async (ctx: typeof ContextMessageUpdate) => {
+bot.start(async (ctx: Context) => {
   startText(ctx);
 });
 
-bot.on('text', async (ctx: typeof ContextMessageUpdate) => {
+bot.on('text', async (ctx: Context) => {
   const userId = ctx.from?.id;
-  const userText = ctx.message?.text;
+  const message = ctx.message as Message.TextMessage;
+  const userText = message.text;
   if (userId && userText) TextController(ctx, userId, userText);
 });
 
