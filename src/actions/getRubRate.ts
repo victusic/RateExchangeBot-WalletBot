@@ -1,13 +1,16 @@
 import { keyboardButtons } from '../const/buttons';
+
 import { getDefaultExchangeText } from '../helpers/getDefaultExchangeText';
 import { getParsedUrl } from '../helpers/getParsedUrl';
 import { Context } from 'telegraf';
 
-export const getTengeRate = async (ctx: Context) => {
+export const getRubRate = async (ctx: Context) => {
   const text = `
-${await getDefaultExchangeText('₽/₸', getParsedUrl('rub-kzt'))}
-${await getDefaultExchangeText('$/₸', getParsedUrl('usd-kzt'))}
-${await getDefaultExchangeText('€/₸', getParsedUrl('eur-kzt'))}
+${await getDefaultExchangeText('₸/₽', getParsedUrl('kzt-rub'))}
+${await getDefaultExchangeText('$/₽', getParsedUrl('usd-rub'))}
+${await getDefaultExchangeText('€/₽', getParsedUrl('eur-rub'))}
+${await getDefaultExchangeText('£/₽', getParsedUrl('gbp-rub'))}
+${await getDefaultExchangeText('฿/₽', getParsedUrl('thb-rub'))}
   `;
   await ctx.reply(text, {
     reply_markup: {

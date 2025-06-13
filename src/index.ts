@@ -1,9 +1,12 @@
-import { startPreview } from './actions/start';
-import { handleSwitchLogic } from './logic/textLogic';
+import { Message } from 'telegraf/typings/core/types/typegram';
+import { adminId, telegramToken } from '../config/telegram';
+import { startText } from './actions/start';
+import { TextController } from './controller/TextController';
 
-const { Telegraf, ContextMessageUpdate } = require('telegraf');
-const { telegramToken, adminId } = require('../config/telegram');
-//const schedule = require("node-schedule");
+import { Telegraf, Context } from 'telegraf';
+import schedule from 'node-schedule';
+import { getHoursRate } from './actions/getHoursRate';
+import { getDailyRate } from './actions/getDailyRate';
 
 const bot = new Telegraf(telegramToken);
 
@@ -13,20 +16,23 @@ const rebootMessage = async () => {
 
 rebootMessage();
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-//const job = schedule.scheduleJob("0 * * * *", newsletersPattern);
-//для тестов
-//const job = schedule.scheduleJob("* * * * *", newsletersPattern);
+//daily
+schedule.scheduleJob('58 9 * * *', () => getDailyRate(bot));
 
-//старт
-bot.start(async (ctx: typeof ContextMessageUpdate) => {
-  startPreview(ctx);
+//hours
+schedule.scheduleJob('59 7,11,13,15,17,19,21,23,1 * * *', () =>
+  getHoursRate(bot)
+);
+
+bot.start(async (ctx: Context) => {
+  startText(ctx);
 });
 
-bot.on('text', async (ctx: typeof ContextMessageUpdate) => {
+bot.on('text', async (ctx: Context) => {
   const userId = ctx.from?.id;
-  const userText = ctx.message?.text;
-  if (userId && userText) handleSwitchLogic(ctx, userId, userText);
+  const message = ctx.message as Message.TextMessage;
+  const userText = message.text;
+  if (userId && userText) TextController(ctx, userText, bot);
 });
 
 bot.launch();
