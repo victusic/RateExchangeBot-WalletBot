@@ -1,3 +1,4 @@
+import { Update } from 'telegraf/typings/core/types/typegram';
 import { getBahtRate } from '../actions/getBahtRate';
 import { getDailyRate } from '../actions/getDailyRate';
 import { getDollarRate } from '../actions/getDollarRate';
@@ -6,12 +7,12 @@ import { getHoursRate } from '../actions/getHoursRate';
 import { getPoundRate } from '../actions/getPoundRate';
 import { getRubRate } from '../actions/getRubRate';
 import { getTengeRate } from '../actions/getTengeRate';
-import { Context } from 'telegraf';
+import { Context, Telegraf } from 'telegraf';
 
 export const TextController = (
   ctx: Context,
-  userId: number,
-  userText: string
+  userText: string,
+  bot: Telegraf<Context<Update>>
 ) => {
   switch (userText) {
     case '₸':
@@ -33,10 +34,10 @@ export const TextController = (
       getBahtRate(ctx);
       break;
     case 'daily':
-      getDailyRate(ctx);
+      getDailyRate(bot);
       break;
     case 'hours':
-      getHoursRate(ctx);
+      getHoursRate(bot);
       break;
     default:
       break;

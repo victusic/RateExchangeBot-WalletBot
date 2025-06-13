@@ -32,7 +32,7 @@ bot.on('text', async (ctx: Context) => {
   const userId = ctx.from?.id;
   const message = ctx.message as Message.TextMessage;
   const userText = message.text;
-  if (userId && userText) TextController(ctx, userId, userText);
+  if (userId && userText) TextController(ctx, userText, bot);
 });
 
 bot.launch();

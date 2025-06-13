@@ -14,7 +14,7 @@ export const getHoursRate = async (bot: Telegraf<Context<Update>>) => {
   const previousRate = parseFloat(previousRateText.replace(',', '.'));
 
   let sendMessage = false;
-  if (Math.abs(currentRubKztRate - previousRate) > 0.2) {
+  if (Math.abs(currentRubKztRate - previousRate) > 0.1) {
     sendMessage = true;
   }
 
