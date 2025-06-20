@@ -17,10 +17,10 @@ const rebootMessage = async () => {
 rebootMessage();
 
 //daily
-schedule.scheduleJob('58 9 * * *', () => getDailyRate(bot));
+schedule.scheduleJob('59 6 * * *', () => getDailyRate(bot));
 
 //hours
-schedule.scheduleJob('59 7,11,13,15,17,19,21,23,1 * * *', () =>
+schedule.scheduleJob('0 4,8,10,12,14,16,18,20,22 * * *', () =>
   getHoursRate(bot)
 );
 
