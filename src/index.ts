@@ -7,6 +7,7 @@ import { Telegraf, Context } from 'telegraf';
 import schedule from 'node-schedule';
 import { getHoursRate } from './actions/getHoursRate';
 import { getDailyRate } from './actions/getDailyRate';
+import { closeBrowser } from './helpers/parsePage';
 
 const bot = new Telegraf(telegramToken);
 
@@ -19,7 +20,7 @@ rebootMessage();
 //daily
 schedule.scheduleJob('59 6 * * *', () => getDailyRate(bot));
 
-//hours
+// //hours
 schedule.scheduleJob('0 4,8,10,12,14,16,18,20,22 * * *', () =>
   getHoursRate(bot)
 );
@@ -36,3 +37,15 @@ bot.on('text', async (ctx: Context) => {
 });
 
 bot.launch();
+
+process.once('SIGINT', () => {
+  console.log('Received SIGINT. Graceful shutdown...');
+  closeBrowser();
+  bot.stop('SIGINT');
+});
+
+process.once('SIGTERM', () => {
+  console.log('Received SIGTERM. Graceful shutdown...');
+  closeBrowser();
+  bot.stop('SIGTERM');
+});
